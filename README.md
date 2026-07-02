@@ -110,6 +110,24 @@ cd frontend
 npm run build      # type-check (vue-tsc) + production-сборка в dist/
 ```
 
+## Деплой (Docker)
+
+В репозитории есть готовый прод-стек: Postgres + Django (gunicorn) + nginx,
+отдающий собранный SPA и проксирующий `/api` на бэкенд. Наружу публикуется
+только nginx.
+
+```bash
+git clone https://github.com/Makarov1e/ad-accounts-manager.git
+cd ad-accounts-manager
+cp .env.prod.example .env      # и заполнить SECRET_KEY, POSTGRES_PASSWORD, ALLOWED_HOSTS
+docker compose up -d --build   # соберёт образы и поднимет стек
+```
+
+Миграции и предзаполнение демо-данными (`seed --if-empty`) выполняются
+автоматически при старте контейнера. Приложение будет доступно на `http://<host>/`
+(порт настраивается через `WEB_PORT` в `.env`). SPA и API работают на одном
+origin, поэтому CORS не задействован.
+
 ## Структура
 
 ```

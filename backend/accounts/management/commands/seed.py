@@ -24,9 +24,17 @@ class Command(BaseCommand):
         parser.add_argument(
             "--fresh", action="store_true", help="Delete existing accounts before seeding."
         )
+        parser.add_argument(
+            "--if-empty",
+            action="store_true",
+            help="Do nothing if accounts already exist (safe for container startup).",
+        )
 
     def handle(self, *args, **options):
         count = options["count"]
+        if options["if_empty"] and Account.objects.exists():
+            self.stdout.write("Accounts already present — skipping seed.")
+            return
         if options["fresh"]:
             deleted, _ = Account.objects.all().delete()
             self.stdout.write(self.style.WARNING(f"Removed {deleted} existing rows."))
