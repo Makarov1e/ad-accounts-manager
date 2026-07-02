@@ -6,8 +6,7 @@
 Реальные рекламные API не используются — данные хранятся в собственной БД.
 
 Дизайн и палитра ориентированы на фирменный стиль
-[lidera-agency.com](https://lidera-agency.com): тёмная тема, акценты
-magenta `#FF058C` / teal `#0ABAB5`, шрифт Montserrat.
+[lidera-agency.com](https://lidera-agency.com)
 
 ## Демо
 
