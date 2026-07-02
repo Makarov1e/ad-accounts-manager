@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+__pycache__/
+.venv/
+venv/
+
+# Build
+dist/
+build/
+
+# Env
+.env
+.env.local
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
