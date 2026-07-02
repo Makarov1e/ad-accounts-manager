@@ -25,6 +25,13 @@ export interface NewAccount {
   department: Department;
 }
 
+export interface NewAccountsBulk {
+  account_ids: string[];
+  type: AccountType;
+  seller: string;
+  department: Department;
+}
+
 export interface Choice<T extends string = string> {
   value: T;
   label: string;

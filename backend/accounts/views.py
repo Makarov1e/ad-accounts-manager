@@ -4,7 +4,7 @@ import csv
 
 from django.db.models import Count
 from django.http import HttpResponse
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -17,7 +17,7 @@ from .models import (
     Department,
     INACTIVE_STATUSES,
 )
-from .serializers import AccountSerializer
+from .serializers import AccountBulkCreateSerializer, AccountSerializer
 
 
 def _choices_payload(choices) -> list[dict[str, str]]:
@@ -40,6 +40,17 @@ class AccountViewSet(viewsets.ModelViewSet):
     search_fields = ["account_id"]
     ordering_fields = ["created_at", "account_id", "status", "seller"]
     ordering = ["-created_at"]
+
+    @action(detail=False, methods=["post"])
+    def bulk(self, request):
+        """Create several accounts in one request (shared type/seller/department)."""
+        serializer = AccountBulkCreateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        created = serializer.save()
+        data = AccountSerializer(created, many=True).data
+        return Response(
+            {"created": len(data), "accounts": data}, status=status.HTTP_201_CREATED
+        )
 
     @action(detail=True, methods=["post"])
     def advance(self, request, pk=None):

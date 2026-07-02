@@ -4,7 +4,13 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 
 import { accountsApi } from "../api/accounts";
-import type { Account, AccountQuery, AccountStatus, Department, NewAccount } from "../types";
+import type {
+  Account,
+  AccountQuery,
+  AccountStatus,
+  Department,
+  NewAccountsBulk,
+} from "../types";
 
 interface Filters {
   search: string;
@@ -67,9 +73,10 @@ export const useAccountsStore = defineStore("accounts", () => {
     if (index !== -1) accounts.value[index] = updated;
   }
 
-  async function create(payload: NewAccount) {
-    await accountsApi.create(payload);
+  async function createMany(payload: NewAccountsBulk): Promise<number> {
+    const { created } = await accountsApi.bulkCreate(payload);
     await fetch();
+    return created;
   }
 
   async function advance(id: number) {
@@ -93,7 +100,7 @@ export const useAccountsStore = defineStore("accounts", () => {
     filters,
     fetch,
     resetFilters,
-    create,
+    createMany,
     advance,
     setStatus,
     remove,

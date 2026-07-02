@@ -6,6 +6,7 @@ import type {
   AccountQuery,
   Meta,
   NewAccount,
+  NewAccountsBulk,
   Paginated,
   Stats,
 } from "../types";
@@ -30,6 +31,9 @@ export const accountsApi = {
     api.get<Paginated<Account>>(`/accounts/${buildQuery(params)}`),
 
   create: (payload: NewAccount) => api.post<Account>("/accounts/", payload),
+
+  bulkCreate: (payload: NewAccountsBulk) =>
+    api.post<{ created: number; accounts: Account[] }>("/accounts/bulk/", payload),
 
   advance: (id: number) => api.post<Account>(`/accounts/${id}/advance/`, {}),
 
